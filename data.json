@@ -1,0 +1,12 @@
+{
+  "name": "TestName2",
+  "surname": "TestSurname2",
+  "username": "TestUsername2",
+  "email": "testEmail2@email.com",
+  "password": "testPassword",
+  "birth_date": "01-01-2001",
+  "scores": [
+    {
+    }
+  ]
+}
