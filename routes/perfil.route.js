@@ -1,18 +1,19 @@
 const express = require('express');
-const serieCtrl = require('../controllers/perfil.controller');
+const perfilCtrl = require('../controllers/perfil.controller');
 const router = express.Router();
 
-router.get('/users', serieCtrl.getUsers);
-router.get('/users/:id', serieCtrl.getUserById);
+router.get('/users', perfilCtrl.getUsers);
+router.get('/users/:id', perfilCtrl.getUserById);
+router.post('/users', perfilCtrl.addUser);
 
+/**
+router.get('/seriesgenre/:genre', perfilCtrl.getSeriesGenre);
+router.get('/seriename/:name', perfilCtrl.getSerieName);
+router.post('/', perfilCtrl.addSerie);
+router.put('/:id', perfilCtrl.updateSerie);
+router.delete('/:id', perfilCtrl.deleteSerie);
 
-
-router.get('/seriesgenre/:genre', serieCtrl.getSeriesGenre);
-router.get('/seriename/:name', serieCtrl.getSerieName);
-router.post('/', serieCtrl.addSerie);
-router.put('/:id', serieCtrl.updateSerie);
-router.delete('/:id', serieCtrl.deleteSerie);
-
-router.get('/genres', serieCtrl.getGenres);
+router.get('/genres', perfilCtrl.getGenres);
+ **/
 
 module.exports = router;

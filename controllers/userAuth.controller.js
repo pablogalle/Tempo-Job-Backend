@@ -1,4 +1,5 @@
 const UserAuth = require('../models/userAuth.model');
+const UserProfile = require("../models/perfil.model");
 
 const authCtrl = {};
 
@@ -7,7 +8,7 @@ authCtrl.getUserAuth = async (req, res) => {
     const userAuth = await UserAuth.findOne({username: userToAuth.username})
         .then((data) => {
             if (!data) {
-                res.status(401).json({message: "Authentication failed"})
+                res.status(404).json({message: "Couldn't find user with username: "+userToAuth.username})
                 return;
             }
             if (data.password === userToAuth.password)
@@ -15,6 +16,7 @@ authCtrl.getUserAuth = async (req, res) => {
             else res.status(401).json({message: "Authentication failed"})
         })
         .catch(err => console.log(err));
-
 }
+
+
 module.exports = authCtrl;

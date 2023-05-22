@@ -1,8 +1,8 @@
 const express = require('express');
-const serieCtrl = require('../controllers/userAuth.controller');
+const authCtrl = require('../controllers/userAuth.controller');
 const router = express.Router();
 
-router.post('/authenticate', serieCtrl.getUserAuth);
+router.post('/authenticate', authCtrl.getUserAuth);
 
 
 module.exports = router;

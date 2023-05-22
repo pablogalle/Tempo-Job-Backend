@@ -1,15 +1,15 @@
 const UserProfile = require('../models/perfil.model');
+const UserAuth = require('../models/userAuth.model');
+const userCtrl = {};
 
-const serieCtrl = {};
 
-
-serieCtrl.getUsers = async (req, res) => {
+userCtrl.getUsers = async (req, res) => {
     const users = await UserProfile.find()
         .then((data) => res.json(data))
         .catch((err) => console.log(err));
 }
 
-serieCtrl.getUserById = async (req, res) => {
+userCtrl.getUserById = async (req, res) => {
     const user = await UserProfile.findById(req.params.id)
         .then((data) => {
             if (data != null) res.json(data)
@@ -19,11 +19,26 @@ serieCtrl.getUserById = async (req, res) => {
 
 }
 
+userCtrl.addUser = async (req, res) => {
+    const myUser = new UserProfile(req.body);
+    try{
+        const savedUser = await myUser.save();
+        const myUserAuth = new UserAuth({username: savedUser.username, password: savedUser.password, userDataId: savedUser.id});
+        await myUserAuth.save();
+
+        res.json({message: 'UserProfile and UserAuth Successfully Inserted'})
+    }catch (error){
+        res.status(500).json({ error: error.message})
+    }
+
+}
+
+module.exports = userCtrl;
 // ----------------------------------------------------------------------------------------
 
 
-
-serieCtrl.addSerie = async (req, res) => {
+/**
+userCtrl.addSerie = async (req, res) => {
     const mySerie = new UserProfile(req.body);
     await mySerie.save()
         .then(() => {
@@ -32,7 +47,7 @@ serieCtrl.addSerie = async (req, res) => {
         .catch(err => res.send(err.message));
 }
 
-serieCtrl.getSerieName = async (req, res) => {
+userCtrl.getSerieName = async (req, res) => {
     const serie = await UserProfile.find({title: req.params.name})
         .then((data) => {
             if (data != null) res.json(data)
@@ -43,7 +58,7 @@ serieCtrl.getSerieName = async (req, res) => {
 }
 
 // TODO -------------
-serieCtrl.getSeriesGenre = async (req, res) => {
+userCtrl.getSeriesGenre = async (req, res) => {
     const series = await UserProfile.find({ "genres.name" : req.params.genre})
         .then((data) => {
             if (data != null) res.json(data)
@@ -52,7 +67,7 @@ serieCtrl.getSeriesGenre = async (req, res) => {
         .catch(err => console.log(err));
 }
 
-serieCtrl.updateSerie = async (req, res) => {
+userCtrl.updateSerie = async (req, res) => {
     const serie = req.body;
     await UserProfile.findByIdAndUpdate(
         req.params.id,
@@ -67,7 +82,7 @@ serieCtrl.updateSerie = async (req, res) => {
 
 
 }
-serieCtrl.deleteSerie = async (req, res) => {
+userCtrl.deleteSerie = async (req, res) => {
     await UserProfile.findByIdAndDelete(req.params.id)
         .then((data) => {
             if (data != null) res.json({message: 'Interfaces Successfully Deleted'})
@@ -75,11 +90,9 @@ serieCtrl.deleteSerie = async (req, res) => {
         })
         .catch(err => res.send(err.message));
 }
-serieCtrl.getGenres = async (req, res) => {
+userCtrl.getGenres = async (req, res) => {
     await UserProfile.find().distinct('genres')
         .then((data) => res.json(data))
         .catch((err) => console.error(err))
-}
+} **/
 
-
-module.exports = serieCtrl;
