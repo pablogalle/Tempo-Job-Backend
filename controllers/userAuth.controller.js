@@ -1,5 +1,4 @@
 const UserAuth = require('../models/userAuth.model');
-const UserProfile = require("../models/perfil.model");
 
 const authCtrl = {};
 

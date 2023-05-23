@@ -20,25 +20,38 @@ userCtrl.getUserById = async (req, res) => {
 }
 
 userCtrl.addUser = async (req, res) => {
-    const myUser = new UserProfile(req.body);
-    try{
+    try {
+        const myUser = new UserProfile(req.body);
+        const existingUser = await UserProfile.findOne({
+            $or: [{username: myUser.username}, {email: myUser.email}]
+        });
+        if (existingUser) {
+            return res.status(400).json({message: 'Username or Email already registered'});
+        }
+
         const savedUser = await myUser.save();
-        const myUserAuth = new UserAuth({username: savedUser.username, password: savedUser.password, userDataId: savedUser.id});
+
+        const myUserAuth = new UserAuth({
+            username: savedUser.username,
+            password: savedUser.password,
+            userDataId: savedUser.id
+        });
         await myUserAuth.save();
 
-        res.json({message: 'UserProfile and UserAuth Successfully Inserted'})
-    }catch (error){
-        res.status(500).json({ error: error.message})
+        res.status(200).json(myUserAuth)
+    } catch (error) {
+        res.status(500).json({error: error.message})
     }
 
 }
 
 module.exports = userCtrl;
+
 // ----------------------------------------------------------------------------------------
 
 
 /**
-userCtrl.addSerie = async (req, res) => {
+ userCtrl.addSerie = async (req, res) => {
     const mySerie = new UserProfile(req.body);
     await mySerie.save()
         .then(() => {
@@ -47,7 +60,7 @@ userCtrl.addSerie = async (req, res) => {
         .catch(err => res.send(err.message));
 }
 
-userCtrl.getSerieName = async (req, res) => {
+ userCtrl.getSerieName = async (req, res) => {
     const serie = await UserProfile.find({title: req.params.name})
         .then((data) => {
             if (data != null) res.json(data)
@@ -57,8 +70,8 @@ userCtrl.getSerieName = async (req, res) => {
 
 }
 
-// TODO -------------
-userCtrl.getSeriesGenre = async (req, res) => {
+ // TODO -------------
+ userCtrl.getSeriesGenre = async (req, res) => {
     const series = await UserProfile.find({ "genres.name" : req.params.genre})
         .then((data) => {
             if (data != null) res.json(data)
@@ -67,7 +80,7 @@ userCtrl.getSeriesGenre = async (req, res) => {
         .catch(err => console.log(err));
 }
 
-userCtrl.updateSerie = async (req, res) => {
+ userCtrl.updateSerie = async (req, res) => {
     const serie = req.body;
     await UserProfile.findByIdAndUpdate(
         req.params.id,
@@ -82,7 +95,7 @@ userCtrl.updateSerie = async (req, res) => {
 
 
 }
-userCtrl.deleteSerie = async (req, res) => {
+ userCtrl.deleteSerie = async (req, res) => {
     await UserProfile.findByIdAndDelete(req.params.id)
         .then((data) => {
             if (data != null) res.json({message: 'Interfaces Successfully Deleted'})
@@ -90,7 +103,7 @@ userCtrl.deleteSerie = async (req, res) => {
         })
         .catch(err => res.send(err.message));
 }
-userCtrl.getGenres = async (req, res) => {
+ userCtrl.getGenres = async (req, res) => {
     await UserProfile.find().distinct('genres')
         .then((data) => res.json(data))
         .catch((err) => console.error(err))
