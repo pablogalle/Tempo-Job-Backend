@@ -1,4 +1,5 @@
 const Job = require('../models/job.model');
+const UserProfile = require("../models/perfil.model");
 
 const jobCtrl = {};
 
@@ -6,6 +7,14 @@ jobCtrl.getJobs = async (req, res) => {
     const jobs = await Job.find()
         .then((data) => res.json(data))
         .catch((err) => console.log(err));
+}
+jobCtrl.getJobById = async (req, res) => {
+    const job = await Job.findById(req.params.jobId)
+        .then((data) => {
+            if (data != null) res.json(data)
+            else res.json({message: "Job doesn't exist"})
+        })
+        .catch(err => console.log(err));
 }
 
 jobCtrl.insertJob =  async (req, res) => {

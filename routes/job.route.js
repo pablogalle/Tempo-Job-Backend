@@ -3,8 +3,10 @@ const jobCtrl = require('../controllers/job.controller');
 const router = express.Router();
 
 router.get('/', jobCtrl.getJobs);
+router.get('/:jobId', jobCtrl.getJobById);
 router.post('/', jobCtrl.insertJob);
 
-router.get('/:userId', jobCtrl.getJobsByUserId)
+
+router.get('/userJobs/:userId', jobCtrl.getJobsByUserId)
 
 module.exports = router;
