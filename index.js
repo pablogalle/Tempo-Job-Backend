@@ -16,6 +16,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', require('./routes/userAuth.route'));
 app.use('/api/jobs', require('./routes/job.route'));
+app.use('/api/chats', require('./routes/chats.route'));
 app.use('/api/', require('./routes/perfil.route'));
 app.use('/',(req, res) => res.send('API in /api'));
 

@@ -35,4 +35,13 @@ jobCtrl.getJobsByUserId = async (req, res) => {
         .catch(err => console.log(err));
 }
 
+jobCtrl.deleteJobById = async (req, res) => {
+    await Job.findByIdAndDelete(req.params.jobId)
+        .then((data) => {
+            if (data != null) res.json({message: 'Job Successfully Deleted'})
+            else res.json({message: "Job with recieved id doesn't exist"})
+        })
+        .catch(err => res.send(err.message));
+}
+
 module.exports = jobCtrl;

@@ -43,6 +43,20 @@ userCtrl.addUser = async (req, res) => {
         res.status(500).json({error: error.message})
     }
 
+    userCtrl.updateUser = async (req, res) => {
+        const userUpdate = req.body;
+        await UserProfile.findByIdAndUpdate(
+            req.params.id,
+            {$set: userUpdate},
+            {new: true}
+        )
+            .then((data) => {
+                if (data != null) res.json({message: 'User Successfully Updated'})
+                else res.json({message: "User doesn't exist"})
+            })
+            .catch(err => res.send(err.message));
+    }
+
 }
 
 module.exports = userCtrl;

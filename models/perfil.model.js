@@ -11,6 +11,9 @@ const userProfileSchema = new Schema({
     scores: [{
         username:{type: String, required: true},
         score:{type:Number, required:true}
+    }],
+    chats: [{
+        chatId:{type: String, required:true}
     }]
 });
 
