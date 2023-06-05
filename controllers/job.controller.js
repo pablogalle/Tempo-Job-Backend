@@ -27,7 +27,7 @@ jobCtrl.insertJob =  async (req, res) => {
 }
 
 jobCtrl.getJobsByUserId = async (req, res) => {
-    const series = await Job.find({ "creator.userId" : req.params.userId})
+    const series = await Job.find({ "creator.unserId" : req.params.userId})
         .then((data) => {
             if (data != null) res.json(data)
             else res.json({message: "Genre doesn't exist"})

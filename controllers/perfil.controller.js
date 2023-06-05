@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const UserProfile = require('../models/perfil.model');
 const UserAuth = require('../models/userAuth.model');
 const userCtrl = {};
@@ -28,7 +29,8 @@ userCtrl.addUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({message: 'Username or Email already registered'});
         }
-
+        const  salt = await bcrypt.genSalt(10);
+        myUser.password = await bcrypt.hash(myUser.password, salt);
         const savedUser = await myUser.save();
 
         const myUserAuth = new UserAuth({
@@ -60,66 +62,3 @@ userCtrl.addUser = async (req, res) => {
 }
 
 module.exports = userCtrl;
-
-// ----------------------------------------------------------------------------------------
-
-
-/**
- userCtrl.addSerie = async (req, res) => {
-    const mySerie = new UserProfile(req.body);
-    await mySerie.save()
-        .then(() => {
-            res.json({message: 'UserProfile Successfully Inserted'})
-        })
-        .catch(err => res.send(err.message));
-}
-
- userCtrl.getSerieName = async (req, res) => {
-    const serie = await UserProfile.find({title: req.params.name})
-        .then((data) => {
-            if (data != null) res.json(data)
-            else res.json({message: "UserProfile doesn't exist"})
-        })
-        .catch(err => console.log(err));
-
-}
-
- // TODO -------------
- userCtrl.getSeriesGenre = async (req, res) => {
-    const series = await UserProfile.find({ "genres.name" : req.params.genre})
-        .then((data) => {
-            if (data != null) res.json(data)
-            else res.json({message: "Genre doesn't exist"})
-        })
-        .catch(err => console.log(err));
-}
-
- userCtrl.updateSerie = async (req, res) => {
-    const serie = req.body;
-    await UserProfile.findByIdAndUpdate(
-        req.params.id,
-        {$set: serie},
-        {new: true}
-    )
-        .then((data) => {
-            if (data != null) res.json({message: 'Series Successfully Updated'})
-            else res.json({message: "Series doesn't exist"})
-        })
-        .catch(err => res.send(err.message));
-
-
-}
- userCtrl.deleteSerie = async (req, res) => {
-    await UserProfile.findByIdAndDelete(req.params.id)
-        .then((data) => {
-            if (data != null) res.json({message: 'Interfaces Successfully Deleted'})
-            else res.json({message: "UserProfile doesn't exist"})
-        })
-        .catch(err => res.send(err.message));
-}
- userCtrl.getGenres = async (req, res) => {
-    await UserProfile.find().distinct('genres')
-        .then((data) => res.json(data))
-        .catch((err) => console.error(err))
-} **/
-
